@@ -26,7 +26,7 @@ if !exists("g:netrw_banner")
 endif
 let s:netrw_up = ''
 
-nnoremap <silent> <Plug>VinegarUp :call <SID>opendir('edit')<CR>
+nnoremap <silent> <Plug>VinegarUp :call <SID>opendir('Explore')<CR>
 if empty(maparg('-', 'n'))
   nmap - <Plug>VinegarUp
 endif
@@ -47,8 +47,13 @@ function! s:opendir(cmd) abort
   elseif expand('%') =~# '^$\|^term:[\/][\/]'
     execute a:cmd '.'
   else
+    let alt_file = expand('%:t')
+    if !exists("g:netrw_altfile") || g:netrw_altfile == 0
+      let @# = expand('%')
+    endif
+    normal! m`
     execute a:cmd '%:h'
-    call s:seek(expand('#:t'))
+    call s:seek(alt_file)
   endif
 endfunction
 
